@@ -123,9 +123,9 @@
     .hero-bg {
       position: absolute;
       inset: 0;
-      background-image: url('https://www.subaru-presse.de/fileadmin/_processed_/0/f/csm_22FORESTER_M0170BP_20iS-ES-MHEV_ECFR_CGS_NP_EC_c6c1326633_94c02818ec.jpg');
+      background-image: url('https://www.subaru.de/hs-fs/hubfs/Landingpages/Forester_MJ25/Forester_MJ25_Hero.jpg');
       background-size: cover;
-      background-position: center 55%;
+      background-position: center center;
       transform: scale(1.04);
       transition: transform 8s ease;
     }
@@ -775,6 +775,8 @@
 
     /* MOBILE */
     @media (max-width: 600px) {
+      .hero-bg { background-position: 60% center; }
+      .hero-section { min-height: 85vh; }
       nav { padding: 1rem 1.25rem; }
       nav ul { display: none; }
       .nav-toggle { display: flex; }
