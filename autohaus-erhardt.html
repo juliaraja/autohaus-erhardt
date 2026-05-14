@@ -1,0 +1,1334 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Autohaus Erhardt Esslingen</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --black: #0a0a0a;
+      --dark: #111;
+      --card: #1a1a1a;
+      --border: #2a2a2a;
+      --accent: #e8001d;
+      --accent-dark: #b8001a;
+      --text: #f0f0f0;
+      --muted: #888;
+      --radius: 12px;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: var(--black);
+      color: var(--text);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    /* NAV */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.2rem 2rem;
+      background: rgba(10,10,10,0.85);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .logo {
+      font-size: 1.1rem;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+    .logo span { color: var(--accent); }
+
+    nav ul {
+      list-style: none;
+      display: flex;
+      gap: 2rem;
+    }
+    nav a {
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 0.9rem;
+      transition: color 0.2s;
+    }
+    nav a:hover { color: var(--text); }
+
+    .nav-toggle {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      cursor: pointer;
+      padding: 4px;
+      background: none;
+      border: none;
+    }
+    .nav-toggle span {
+      display: block;
+      width: 22px;
+      height: 2px;
+      background: var(--text);
+      border-radius: 2px;
+      transition: transform 0.3s, opacity 0.3s;
+    }
+    .nav-toggle.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+    .nav-toggle.open span:nth-child(2) { opacity: 0; }
+    .nav-toggle.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+    .mobile-menu {
+      display: none;
+      position: fixed;
+      top: 57px;
+      left: 0; right: 0;
+      background: rgba(10,10,10,0.97);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border);
+      padding: 1.5rem 2rem 2rem;
+      z-index: 99;
+      flex-direction: column;
+      gap: 0;
+    }
+    .mobile-menu.open { display: flex; }
+    .mobile-menu a {
+      color: var(--text);
+      text-decoration: none;
+      font-size: 1.1rem;
+      font-weight: 500;
+      padding: 0.9rem 0;
+      border-bottom: 1px solid var(--border);
+      transition: color 0.2s;
+    }
+    .mobile-menu a:last-child { border-bottom: none; }
+    .mobile-menu a:hover { color: var(--accent); }
+
+    /* HERO */
+    .hero-section {
+      position: relative;
+      min-height: 100vh;
+      display: flex;
+      align-items: flex-end;
+      overflow: hidden;
+    }
+
+    .hero-bg {
+      position: absolute;
+      inset: 0;
+      background-image: url('https://www.subaru-presse.de/fileadmin/_processed_/0/f/csm_22FORESTER_M0170BP_20iS-ES-MHEV_ECFR_CGS_NP_EC_c6c1326633_94c02818ec.jpg');
+      background-size: cover;
+      background-position: center 55%;
+      transform: scale(1.04);
+      transition: transform 8s ease;
+    }
+    .hero-bg.loaded { transform: scale(1); }
+
+    .hero-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(
+        to top,
+        rgba(0,0,0,0.95) 0%,
+        rgba(0,0,0,0.5) 40%,
+        rgba(0,0,0,0.1) 100%
+      );
+    }
+
+    .hero {
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 0 2rem 6rem;
+    }
+
+    .hero-tag {
+      display: inline-block;
+      background: var(--accent);
+      color: #fff;
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      padding: 0.3rem 0.9rem;
+      border-radius: 999px;
+      margin-bottom: 1.5rem;
+    }
+
+    h1, h2 {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+    h1 {
+      font-size: clamp(2.5rem, 6vw, 5rem);
+      font-weight: 800;
+      line-height: 1.1;
+      letter-spacing: -0.01em;
+      margin-bottom: 1.5rem;
+    }
+    h1 em, h2 em {
+      font-style: italic;
+      color: var(--accent);
+    }
+
+    .hero p {
+      font-size: 1.15rem;
+      color: rgba(255,255,255,0.7);
+      max-width: 560px;
+      margin-bottom: 2.5rem;
+    }
+
+    .btn {
+      display: inline-block;
+      background: var(--accent);
+      color: #fff;
+      text-decoration: none;
+      padding: 0.85rem 2rem;
+      border-radius: var(--radius);
+      font-weight: 600;
+      font-size: 0.95rem;
+      transition: opacity 0.2s;
+    }
+    .btn:hover { opacity: 0.85; }
+    .hero-btns { display: flex; flex-wrap: wrap; gap: 0.75rem; }
+    .btn-outline {
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--text);
+    }
+    .btn-outline:hover { border-color: var(--text); opacity: 1; }
+
+    /* SECTIONS */
+    section {
+      padding: 5rem 2rem;
+      max-width: 960px;
+      margin: 0 auto;
+    }
+
+    .section-label {
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 0.75rem;
+    }
+
+    h2 {
+      font-size: clamp(1.8rem, 4vw, 2.8rem);
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      margin-bottom: 0.75rem;
+    }
+
+    .subtitle {
+      color: var(--muted);
+      font-size: 1rem;
+      margin-bottom: 3rem;
+    }
+
+    /* CARDS */
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.75rem;
+      text-align: center;
+      transition: border-color 0.2s;
+    }
+    .card:hover { border-color: #444; }
+
+    .card-icon {
+      width: 36px;
+      height: 36px;
+      margin: 0 auto 1.25rem;
+      color: white;
+      opacity: 0.9;
+    }
+    .card-icon svg {
+      width: 100%;
+      height: 100%;
+    }
+
+    .card h3 {
+      font-size: 1.05rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+    }
+
+    .card p {
+      font-size: 0.9rem;
+      color: var(--muted);
+    }
+
+    /* BRANDS */
+    .brands {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      margin-top: 1.5rem;
+    }
+
+    .brand-chip {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      padding: 0.5rem 1.25rem;
+      font-size: 0.85rem;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+    }
+    .brand-chip.primary { border-color: var(--accent); color: var(--accent); }
+
+    /* CONTACT */
+    .contact-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+    }
+
+    .contact-block h3 {
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 0.75rem;
+    }
+
+    .contact-block p {
+      font-size: 1rem;
+      line-height: 1.8;
+    }
+
+    .contact-block a {
+      color: var(--accent);
+      text-decoration: none;
+    }
+
+    .hours-row {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.95rem;
+      padding: 0.4rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .hours-row:last-child { border-bottom: none; }
+    .hours-row .day { color: var(--muted); }
+
+    /* DIVIDER */
+    hr {
+      border: none;
+      border-top: 1px solid var(--border);
+      max-width: 960px;
+      margin: 0 auto;
+    }
+
+    /* FOOTER */
+    footer {
+      padding: 2rem;
+      text-align: center;
+      font-size: 0.85rem;
+      color: var(--muted);
+    }
+
+    /* STATS STRIP */
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      background: var(--card);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+    .stat {
+      padding: 3rem 2rem;
+      text-align: center;
+      border-right: 1px solid var(--border);
+    }
+    .stat:last-child { border-right: none; }
+    .stat-number {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      font-size: clamp(2.2rem, 4vw, 3.5rem);
+      font-weight: 800;
+      color: var(--accent);
+      line-height: 1;
+      margin-bottom: 0.5rem;
+    }
+    .stat-label {
+      font-size: 0.8rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+    @media (max-width: 600px) {
+      .stats { grid-template-columns: 1fr 1fr; }
+      .stat:nth-child(2) { border-right: none; }
+    }
+
+    /* SCROLL FADE */
+    .fade-up {
+      opacity: 0;
+      transform: translateY(50px);
+      transition: opacity 0.75s cubic-bezier(0.16, 1, 0.3, 1), transform 0.75s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .fade-up.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .fade-up.delay-1 { transition-delay: 0.1s; }
+    .fade-up.delay-2 { transition-delay: 0.2s; }
+    .fade-up.delay-3 { transition-delay: 0.3s; }
+    .fade-up.delay-4 { transition-delay: 0.4s; }
+    .fade-up.delay-5 { transition-delay: 0.5s; }
+
+    /* TEAM */
+    .team-section {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 5rem 2rem;
+    }
+    .team-swiper {
+      position: relative;
+      overflow: hidden;
+      border-radius: var(--radius);
+    }
+    .team-track {
+      display: grid;
+    }
+    .team-track .team-card {
+      grid-area: 1 / 1;
+      opacity: 0;
+      transform: translateX(40px);
+      transition: opacity 0.5s ease, transform 0.5s ease;
+      pointer-events: none;
+    }
+    .team-track .team-card.is-active {
+      opacity: 1;
+      transform: translateX(0);
+      pointer-events: auto;
+    }
+    .team-track .team-card.slide-out {
+      opacity: 0;
+      transform: translateX(-40px);
+      transition: opacity 0.3s ease, transform 0.3s ease;
+    }
+    .team-card {
+      flex: 0 0 100%;
+      display: grid;
+      grid-template-columns: 180px 1fr;
+      gap: 0;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+    }
+    .team-avatar {
+      background: linear-gradient(135deg, #1a1a1a 0%, #1e0a0a 100%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 0.75rem;
+      padding: 2rem 1.5rem;
+      border-right: 1px solid var(--border);
+    }
+    .team-monogram {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      font-size: 4rem;
+      font-weight: 800;
+      font-style: italic;
+      color: var(--accent);
+      line-height: 1;
+    }
+    .team-avatar span {
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+    .team-info {
+      padding: 2rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+    .team-info .section-label { margin-bottom: 0.5rem; }
+    .team-info h3 {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      font-size: 2rem;
+      font-weight: 700;
+      margin-bottom: 0.3rem;
+    }
+    .team-role {
+      font-size: 0.85rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 1.5rem;
+    }
+    .team-info p {
+      color: var(--muted);
+      font-size: 0.975rem;
+      line-height: 1.8;
+      max-width: 440px;
+      margin-bottom: 2rem;
+    }
+    .team-contact {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+    .team-contact a {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: var(--black);
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      color: var(--text);
+      text-decoration: none;
+      font-size: 0.85rem;
+      font-weight: 500;
+      padding: 0.5rem 1.1rem;
+      transition: border-color 0.2s, color 0.2s;
+    }
+    .team-contact a:hover { border-color: var(--accent); color: var(--accent); }
+    .swiper-outer {
+      position: relative;
+      display: flex;
+      align-items: center;
+      gap: 1.25rem;
+    }
+    .swiper-controls {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.75rem;
+      margin-top: 1.25rem;
+    }
+    .swiper-btn {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 50%;
+      color: var(--text);
+      cursor: pointer;
+      width: 44px;
+      height: 44px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      transition: background 0.2s, border-color 0.2s, color 0.2s, transform 0.2s;
+    }
+    .swiper-btn:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+      transform: scale(1.1);
+    }
+    .swiper-btn:active { transform: scale(0.95); }
+    .swiper-dots {
+      display: flex;
+      gap: 0.5rem;
+    }
+    .swiper-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--border);
+      cursor: pointer;
+      transition: background 0.3s, transform 0.3s;
+    }
+    .swiper-dot.active {
+      background: var(--accent);
+      transform: scale(1.3);
+    }
+    @media (max-width: 700px) {
+      .team-card { grid-template-columns: 1fr; }
+      .team-avatar { border-right: none; border-bottom: 1px solid var(--border); padding: 2rem; }
+      .team-info { padding: 1.5rem; }
+    }
+
+    /* SPLIT SECTIONS */
+    .split {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      min-height: 560px;
+      max-width: 100%;
+    }
+    .split.reverse { direction: rtl; }
+    .split.reverse > * { direction: ltr; }
+
+    .split-img {
+      background-size: cover;
+      background-position: center;
+      min-height: 400px;
+    }
+
+    .split-content {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 5rem 4rem;
+      background: var(--dark);
+    }
+
+    .split-content .section-label { margin-bottom: 0.75rem; }
+
+    .split-content h2 {
+      font-size: clamp(1.8rem, 3vw, 2.6rem);
+      margin-bottom: 1.25rem;
+    }
+
+    .split-content p {
+      color: var(--muted);
+      font-size: 1rem;
+      line-height: 1.8;
+      margin-bottom: 2rem;
+      max-width: 420px;
+    }
+
+    .split-divider {
+      width: 48px;
+      height: 2px;
+      background: var(--accent);
+      margin-bottom: 1.5rem;
+    }
+
+    @media (max-width: 768px) {
+      .split { grid-template-columns: 1fr; }
+      .split-img { min-height: 280px; }
+      .split-content { padding: 3rem 2rem; }
+      .split.reverse { direction: ltr; }
+    }
+
+    /* FORM */
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+    }
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+    }
+    .form-group.full { grid-column: 1 / -1; }
+    .form-group label {
+      font-size: 0.8rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      color: var(--text);
+      font-family: inherit;
+      font-size: 0.95rem;
+      padding: 0.75rem 1rem;
+      transition: border-color 0.2s;
+      outline: none;
+      width: 100%;
+    }
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus { border-color: var(--accent); }
+    .form-group select option { background: var(--card); }
+    .form-group textarea { resize: vertical; min-height: 130px; }
+
+    .form-submit {
+      margin-top: 1.25rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+    .form-submit button {
+      background: var(--accent);
+      color: #fff;
+      border: none;
+      border-radius: var(--radius);
+      font-family: inherit;
+      font-size: 0.95rem;
+      font-weight: 600;
+      padding: 0.85rem 2rem;
+      cursor: pointer;
+      transition: opacity 0.2s;
+    }
+    .form-submit button:hover { opacity: 0.85; }
+
+    .form-success {
+      display: none;
+      background: #0d2b1a;
+      border: 1px solid #1a5c35;
+      border-radius: var(--radius);
+      color: #4ade80;
+      font-size: 0.95rem;
+      padding: 1rem 1.25rem;
+      margin-top: 1.25rem;
+    }
+
+    /* FOOTER */
+    .footer-main {
+      background: var(--card);
+      border-top: 1px solid var(--border);
+      padding: 5rem 2rem 3rem;
+    }
+    .footer-grid {
+      max-width: 960px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1.5fr;
+      gap: 3rem;
+    }
+    .footer-brand .logo {
+      font-size: 1.2rem;
+      margin-bottom: 1rem;
+      display: block;
+    }
+    .footer-brand p {
+      font-size: 0.9rem;
+      color: var(--muted);
+      line-height: 1.7;
+      max-width: 240px;
+      margin-bottom: 1.5rem;
+    }
+    .footer-brand .brand-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+    .footer-brand .brand-chip {
+      font-size: 0.75rem;
+      padding: 0.3rem 0.8rem;
+    }
+    .footer-col h4 {
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 1.25rem;
+    }
+    .footer-col ul {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+    .footer-col ul a {
+      color: var(--text);
+      text-decoration: none;
+      font-size: 0.9rem;
+      transition: color 0.2s;
+    }
+    .footer-col ul a:hover { color: var(--accent); }
+    .footer-hours .hours-row {
+      font-size: 0.875rem;
+      padding: 0.5rem 0;
+    }
+    .footer-bottom {
+      max-width: 960px;
+      margin: 3rem auto 0;
+      padding-top: 1.5rem;
+      border-top: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.8rem;
+      color: var(--muted);
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+    .footer-bottom a { color: var(--muted); text-decoration: none; }
+    .footer-bottom a:hover { color: var(--accent); }
+    @media (max-width: 768px) {
+      .footer-grid { grid-template-columns: 1fr 1fr; }
+      .footer-brand { grid-column: 1 / -1; }
+    }
+    @media (max-width: 480px) {
+      .footer-grid { grid-template-columns: 1fr; }
+    }
+
+    /* MOBILE */
+    @media (max-width: 600px) {
+      nav { padding: 1rem 1.25rem; }
+      nav ul { display: none; }
+      .nav-toggle { display: flex; }
+
+      .hero { padding: 0 1.25rem 3.5rem; }
+      .hero p { font-size: 1rem; }
+      .hero > div { display: flex; flex-direction: column; gap: 0.75rem; }
+      .btn-outline { margin-left: 0; }
+      .btn { text-align: center; }
+
+      section { padding: 3rem 1.25rem; }
+      .team-section { padding: 3rem 1.25rem; }
+
+      .grid { grid-template-columns: 1fr; }
+
+      .stats { grid-template-columns: 1fr 1fr; }
+      .stat { padding: 2rem 1rem; }
+      .stat:nth-child(2) { border-right: none; }
+
+      .split { min-height: unset; }
+      .split-img { min-height: 220px; }
+      .split-content { padding: 2rem 1.25rem; }
+
+      .contact-grid { grid-template-columns: 1fr; }
+      .form-grid { grid-template-columns: 1fr; }
+
+      .swiper-outer { gap: 0.4rem; }
+      .swiper-btn { width: 34px; height: 34px; flex-shrink: 0; }
+
+      .footer-main { padding: 3rem 1.25rem 2rem; }
+      .footer-bottom { flex-direction: column; text-align: center; gap: 0.75rem; }
+
+      hr { margin: 0; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <div class="logo">Autohaus <span>Erhardt</span></div>
+    <ul>
+      <li><a href="#services">Leistungen</a></li>
+      <li><a href="#brands">Marken</a></li>
+      <li><a href="#contact">Kontakt</a></li>
+      <li><a href="#form">Anfrage</a></li>
+    </ul>
+    <button class="nav-toggle" id="navToggle" aria-label="Menü">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="#services" onclick="closeMobile()">Leistungen</a>
+    <a href="#brands" onclick="closeMobile()">Marken</a>
+    <a href="#contact" onclick="closeMobile()">Kontakt</a>
+    <a href="#form" onclick="closeMobile()">Anfrage</a>
+  </div>
+  <script>
+    const toggle = document.getElementById('navToggle');
+    const menu = document.getElementById('mobileMenu');
+    toggle.addEventListener('click', () => {
+      toggle.classList.toggle('open');
+      menu.classList.toggle('open');
+    });
+    function closeMobile() {
+      toggle.classList.remove('open');
+      menu.classList.remove('open');
+    }
+  </script>
+
+  <!-- HERO -->
+  <div class="hero-section">
+    <div class="hero-bg" id="heroBg"></div>
+    <div class="hero-overlay"></div>
+    <div class="hero">
+      <span class="hero-tag fade-up" data-delay="0">Ihr Autohaus in Esslingen</span>
+      <h1 class="fade-up" data-delay="150">Schwäbischer Tüftlergeist.<br>Handwerkliche <em>Perfektion.</em></h1>
+      <p class="fade-up" data-delay="300">Absolute Kundennähe in freundlicher Atmosphäre — seit Jahren Ihr vertrauensvoller Partner rund ums Fahrzeug an der B10.</p>
+      <div class="fade-up hero-btns" data-delay="450">
+        <a href="#form" class="btn">Termin vereinbaren</a>
+        <a href="#services" class="btn btn-outline">Leistungen</a>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const bg = document.getElementById('heroBg');
+    const img = new Image();
+    img.onload = () => bg.classList.add('loaded');
+    img.src = 'https://www.subaru-presse.de/fileadmin/_processed_/0/f/csm_22FORESTER_M0170BP_20iS-ES-MHEV_ECFR_CGS_NP_EC_c6c1326633_94c02818ec.jpg';
+    setTimeout(() => bg.classList.add('loaded'), 100);
+  </script>
+
+  <!-- STATS -->
+  <div class="stats">
+    <div class="stat">
+      <div class="stat-number">30+</div>
+      <div class="stat-label">Jahre Erfahrung</div>
+    </div>
+    <div class="stat">
+      <div class="stat-number">3</div>
+      <div class="stat-label">Marken</div>
+    </div>
+    <div class="stat">
+      <div class="stat-number">100%</div>
+      <div class="stat-label">Alle Fabrikate</div>
+    </div>
+    <div class="stat">
+      <div class="stat-number">6×</div>
+      <div class="stat-label">Tage die Woche</div>
+    </div>
+  </div>
+
+  <hr />
+
+  <!-- SERVICES -->
+  <section id="services">
+    <div class="section-label fade-up">Was wir tun</div>
+    <h2 class="fade-up delay-1">Alles aus <em>einer Hand</em></h2>
+    <p class="subtitle fade-up delay-2">Vom Neuwagenkauf bis zur Jahresinspektion — wir sind für Sie da.</p>
+    <div class="grid">
+      <div class="card fade-up delay-1">
+        <div class="card-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M5 17H3a2 2 0 0 1-2-2v-4l3-6h14l3 6v4a2 2 0 0 1-2 2h-2"/>
+            <circle cx="7.5" cy="17.5" r="2.5"/><circle cx="16.5" cy="17.5" r="2.5"/>
+          </svg>
+        </div>
+        <h3>Neuwagen & Gebrauchtwagen</h3>
+        <p>Große Auswahl an Neu- und Gebrauchtfahrzeugen mit persönlicher Beratung.</p>
+      </div>
+      <div class="card fade-up delay-2">
+        <div class="card-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/>
+          </svg>
+        </div>
+        <h3>Werkstatt & Reparatur</h3>
+        <p>Reparaturen und Wartung für alle Fabrikate — schnell, sauber und zuverlässig.</p>
+      </div>
+      <div class="card fade-up delay-3">
+        <div class="card-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"/>
+            <rect x="9" y="3" width="6" height="4" rx="1"/>
+            <path d="m9 12 2 2 4-4"/>
+          </svg>
+        </div>
+        <h3>Inspektion, HU & AU</h3>
+        <p>Wir begleiten Sie durch alle Prüfungen und halten Ihr Fahrzeug auf dem neuesten Stand.</p>
+      </div>
+      <div class="card fade-up delay-1">
+        <div class="card-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"/>
+            <circle cx="12" cy="12" r="3"/>
+            <line x1="12" y1="2" x2="12" y2="9"/><line x1="12" y1="15" x2="12" y2="22"/>
+            <line x1="2" y1="12" x2="9" y2="12"/><line x1="15" y1="12" x2="22" y2="12"/>
+          </svg>
+        </div>
+        <h3>Reifenservice</h3>
+        <p>Reifenwechsel, Einlagerung und Beratung — saisonal und auf Wunsch.</p>
+      </div>
+      <div class="card fade-up delay-2">
+        <div class="card-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="1" y="4" width="22" height="16" rx="2"/>
+            <line x1="1" y1="10" x2="23" y2="10"/>
+          </svg>
+        </div>
+        <h3>Finanzierung & Versicherung</h3>
+        <p>Individuelle Finanzierungsangebote und Versicherungsberatung direkt vor Ort.</p>
+      </div>
+      <div class="card fade-up delay-3">
+        <div class="card-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="3"/>
+            <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+          </svg>
+        </div>
+        <h3>Zubehör & Ausstattung</h3>
+        <p>Individuelle Extras und Original-Zubehör für Ihr Fahrzeug.</p>
+      </div>
+    </div>
+  </section>
+
+  <hr />
+
+  <!-- SPLIT 1: Werkstatt -->
+  <div class="split fade-up">
+    <div class="split-img" style="background-image: url('https://images.unsplash.com/photo-1606577924006-27d39b132ae2?w=1920&q=85&auto=format&fit=crop');"></div>
+    <div class="split-content">
+      <div class="section-label">Werkstatt & Service</div>
+      <div class="split-divider"></div>
+      <h2>Ihr Fahrzeug in <em>besten Händen</em></h2>
+      <p>Unsere zertifizierten Techniker kümmern sich mit Präzision und Leidenschaft um Ihr Fahrzeug — von der kleinen Inspektion bis zur großen Reparatur. Schnell. Sauber. Zuverlässig.</p>
+      <a href="#form" class="btn" style="align-self:flex-start;">Termin vereinbaren</a>
+    </div>
+  </div>
+
+  <hr />
+
+  <!-- SPLIT 2: Neufahrzeuge -->
+  <div class="split reverse fade-up">
+    <div class="split-img" style="background-image: url('https://images.unsplash.com/photo-1636074641063-1c2152f1b31e?w=1920&q=85&auto=format&fit=crop'); background-position: center 60%;"></div>
+    <div class="split-content">
+      <div class="section-label">Neufahrzeuge</div>
+      <div class="split-divider"></div>
+      <h2>Fahren, was <em>begeistert</em></h2>
+      <p>Als autorisierter Subaru-, Isuzu- und Piaggio-Händler bieten wir Ihnen die neuesten Modelle mit persönlicher Beratung und attraktiven Finanzierungsoptionen direkt vor Ort.</p>
+      <a href="#contact" class="btn" style="align-self:flex-start;">Jetzt beraten lassen</a>
+    </div>
+  </div>
+
+  <hr />
+
+  <!-- BRANDS -->
+  <section id="brands">
+    <div class="section-label fade-up">Unsere Marken</div>
+    <h2 class="fade-up delay-1">Vertragshändler & <em>Partnerwerkstatt</em></h2>
+    <p class="subtitle">Autorisierter Händler für Neufahrzeuge sowie anerkannte Werkstatt für weitere Marken.</p>
+    <p style="font-weight:600; margin-bottom:0.75rem; font-size:0.9rem; color:var(--muted);">Vertragshändler</p>
+    <div class="brands">
+      <span class="brand-chip primary">Subaru</span>
+      <span class="brand-chip primary">Isuzu</span>
+      <span class="brand-chip primary">Piaggio Commercial</span>
+    </div>
+    <p style="font-weight:600; margin-top:2rem; margin-bottom:0.75rem; font-size:0.9rem; color:var(--muted);">Anerkannte Werkstatt</p>
+    <div class="brands">
+      <span class="brand-chip">Daihatsu</span>
+      <span class="brand-chip">MG</span>
+      <span class="brand-chip">Rover</span>
+      <span class="brand-chip">Alle Fabrikate</span>
+    </div>
+  </section>
+
+  <hr />
+
+  <!-- TEAM -->
+  <div class="team-section fade-up">
+    <div class="section-label">Ihr Team</div>
+    <h2 style="margin-bottom:2rem;">Persönlich. <em>Kompetent.</em></h2>
+    <div class="swiper-outer">
+      <button class="swiper-btn" id="swiperPrev" aria-label="Zurück">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+      </button>
+      <div class="team-swiper" id="teamSwiper">
+        <div class="team-track" id="teamTrack"></div>
+      </div>
+      <button class="swiper-btn" id="swiperNext" aria-label="Weiter">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+      </button>
+    </div>
+    <div class="swiper-controls">
+      <div class="swiper-dots" id="swiperDots"></div>
+    </div>
+  </div>
+
+  <hr />
+
+  <!-- CONTACT -->
+  <section id="contact">
+    <div class="section-label fade-up">Kontakt</div>
+    <h2 class="fade-up delay-1">Wir sind für <em>Sie da</em></h2>
+    <p class="subtitle">Besuchen Sie uns an der B10 in Esslingen oder rufen Sie uns an.</p>
+    <div class="contact-grid">
+      <div>
+        <div class="contact-block" style="margin-bottom:2rem;">
+          <h3>Telefon</h3>
+          <p><a href="tel:+4971131696160">+49 (0) 711 316 96 16</a></p>
+        </div>
+        <div class="contact-block">
+          <h3>Standort</h3>
+          <p>Esslingen am Neckar<br>an der Bundesstraße B10</p>
+        </div>
+      </div>
+      <div class="contact-block">
+        <h3>Öffnungszeiten</h3>
+        <div class="hours-row">
+          <span class="day">Montag – Freitag</span>
+          <span>07:30 – 18:00 Uhr</span>
+        </div>
+        <div class="hours-row">
+          <span class="day">Samstag</span>
+          <span>09:00 – 14:00 Uhr</span>
+        </div>
+        <div class="hours-row">
+          <span class="day">Sonntag</span>
+          <span style="color:var(--muted)">Geschlossen</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <hr />
+
+  <!-- FORM -->
+  <section id="form">
+    <div class="section-label fade-up">Kontaktformular</div>
+    <h2 class="fade-up delay-1">Schreiben Sie <em>uns</em></h2>
+    <p class="subtitle">Wir melden uns so schnell wie möglich bei Ihnen zurück.</p>
+
+    <form id="contactForm" onsubmit="handleSubmit(event)" novalidate>
+      <div class="form-grid">
+        <div class="form-group">
+          <label for="name">Name *</label>
+          <input type="text" id="name" placeholder="Max Mustermann" required />
+        </div>
+        <div class="form-group">
+          <label for="email">E-Mail *</label>
+          <input type="email" id="email" placeholder="max@beispiel.de" required />
+        </div>
+        <div class="form-group">
+          <label for="phone">Telefon</label>
+          <input type="tel" id="phone" placeholder="+49 711 ..." />
+        </div>
+        <div class="form-group">
+          <label for="subject">Ihr Anliegen *</label>
+          <select id="subject" required>
+            <option value="" disabled selected>Bitte wählen …</option>
+            <option>Terminanfrage Werkstatt</option>
+            <option>Fahrzeugkauf / Beratung</option>
+            <option>Reifenservice</option>
+            <option>Finanzierung & Versicherung</option>
+            <option>Sonstiges</option>
+          </select>
+        </div>
+        <div class="form-group full">
+          <label for="message">Nachricht *</label>
+          <textarea id="message" placeholder="Wie können wir Ihnen helfen?" required></textarea>
+        </div>
+      </div>
+      <div class="form-submit">
+        <button type="submit">Nachricht senden</button>
+        <span style="font-size:0.8rem; color:var(--muted);">* Pflichtfelder</span>
+      </div>
+      <div class="form-success" id="formSuccess">
+        ✓ Vielen Dank! Ihre Nachricht wurde gesendet. Wir melden uns bald bei Ihnen.
+      </div>
+    </form>
+  </section>
+
+  <script>
+    function handleSubmit(e) {
+      e.preventDefault();
+      const form = document.getElementById('contactForm');
+      const success = document.getElementById('formSuccess');
+      success.style.display = 'block';
+      form.querySelectorAll('input, select, textarea, button').forEach(el => el.disabled = true);
+      form.querySelector('button').textContent = 'Gesendet';
+    }
+
+    // Team Swiper
+    const teamMembers = [
+      {
+        initials: 'TE',
+        role: 'Geschäftsführer',
+        name: 'Thomas Erhardt',
+        fullRole: 'Geschäftsführer & Inhaber',
+        bio: 'Mit Leidenschaft für Fahrzeuge und einem offenen Ohr für jeden Kunden leitet Thomas Erhardt das Autohaus seit Jahren mit schwäbischem Tüftlergeist.',
+      },
+      {
+        initials: 'OL',
+        role: 'Werkstattmeister',
+        name: 'Oliver Langhammer',
+        fullRole: 'Werkstattmeister',
+        bio: 'Als erfahrener Kfz-Meister sorgt Oliver Langhammer dafür, dass jedes Fahrzeug mit höchster Sorgfalt und technischer Präzision behandelt wird.',
+      },
+    ];
+
+    function buildCard(m) {
+      return `<div class="team-card">
+        <div class="team-avatar">
+          <div class="team-monogram">${m.initials}</div>
+          <span>${m.role}</span>
+        </div>
+        <div class="team-info">
+          <div class="section-label">Autohaus Erhardt</div>
+          <h3>${m.name}</h3>
+          <div class="team-role">${m.fullRole}</div>
+          <p>${m.bio}</p>
+          <div class="team-contact">
+            <a href="tel:+4971131696160">📞 +49 (0) 711 316 96 16</a>
+            <a href="#form">✉ Nachricht senden</a>
+          </div>
+        </div>
+      </div>`;
+    }
+
+    (function initSwiper() {
+      const track = document.getElementById('teamTrack');
+      const dotsEl = document.getElementById('swiperDots');
+      const n = teamMembers.length;
+      let current = 0;
+      let isAnimating = false;
+
+      track.innerHTML = teamMembers.map(buildCard).join('');
+      const cards = track.querySelectorAll('.team-card');
+
+      teamMembers.forEach((_, i) => {
+        const d = document.createElement('div');
+        d.className = 'swiper-dot' + (i === 0 ? ' active' : '');
+        d.addEventListener('click', () => goTo(i));
+        dotsEl.appendChild(d);
+      });
+
+      function updateDots() {
+        dotsEl.querySelectorAll('.swiper-dot').forEach((d, i) => {
+          d.classList.toggle('active', i === current);
+        });
+      }
+
+      function goTo(idx) {
+        if (isAnimating || idx === current) return;
+        isAnimating = true;
+        const prev = current;
+        current = ((idx % n) + n) % n;
+
+        cards[prev].classList.add('slide-out');
+        cards[prev].classList.remove('is-active');
+
+        setTimeout(() => {
+          cards[prev].classList.remove('slide-out');
+          cards[current].classList.add('is-active');
+          updateDots();
+          setTimeout(() => { isAnimating = false; }, 500);
+        }, 300);
+      }
+
+      cards[0].classList.add('is-active');
+
+      document.getElementById('swiperPrev').addEventListener('click', () => goTo(current - 1));
+      document.getElementById('swiperNext').addEventListener('click', () => goTo(current + 1));
+    })();
+
+    // Stats CountUp animation
+    function animateCount(el, target, suffix, duration = 1600) {
+      let start = 0;
+      const step = timestamp => {
+        if (!start) start = timestamp;
+        const progress = Math.min((timestamp - start) / duration, 1);
+        const ease = 1 - Math.pow(1 - progress, 3);
+        el.textContent = Math.floor(ease * target) + suffix;
+        if (progress < 1) requestAnimationFrame(step);
+      };
+      requestAnimationFrame(step);
+    }
+
+    const statsData = [
+      { suffix: '+', target: 30 },
+      { suffix: '',  target: 3  },
+      { suffix: '%', target: 100 },
+      { suffix: '×', target: 6  },
+    ];
+
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (!entry.isIntersecting) return;
+        document.querySelectorAll('.stat-number').forEach((el, i) => {
+          const d = statsData[i];
+          if (d) animateCount(el, d.target, d.suffix);
+        });
+        observer.disconnect();
+      });
+    }, { threshold: 0.4 });
+
+    const statsEl = document.querySelector('.stats');
+    if (statsEl) observer.observe(statsEl);
+
+    // Scroll fade-up
+    const fadeObserver = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (!entry.isIntersecting) return;
+        const el = entry.target;
+        const delay = parseInt(el.dataset.delay || el.classList.contains('delay-1') ? 100
+          : el.classList.contains('delay-2') ? 200
+          : el.classList.contains('delay-3') ? 300
+          : el.classList.contains('delay-4') ? 400
+          : el.classList.contains('delay-5') ? 500
+          : el.dataset.delay || 0);
+        setTimeout(() => el.classList.add('visible'), isNaN(delay) ? 0 : delay);
+        fadeObserver.unobserve(el);
+      });
+    }, { threshold: 0.08, rootMargin: '0px 0px -60px 0px' });
+
+    document.querySelectorAll('.fade-up').forEach(el => fadeObserver.observe(el));
+  </script>
+
+  <hr />
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-main">
+      <div class="footer-grid">
+
+        <div class="footer-brand">
+          <span class="logo">Autohaus <span>Erhardt</span></span>
+          <p>Schwäbischer Tüftlergeist und handwerkliche Perfektion — Ihr vertrauensvoller Kfz-Partner in Esslingen an der B10.</p>
+          <div class="brand-chips brands">
+            <span class="brand-chip primary">Subaru</span>
+            <span class="brand-chip primary">Isuzu</span>
+            <span class="brand-chip primary">Piaggio</span>
+          </div>
+        </div>
+
+        <div class="footer-col">
+          <h4>Navigation</h4>
+          <ul>
+            <li><a href="#services">Leistungen</a></li>
+            <li><a href="#brands">Marken</a></li>
+            <li><a href="#contact">Kontakt</a></li>
+            <li><a href="#form">Anfrage</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4>Leistungen</h4>
+          <ul>
+            <li><a href="#services">Werkstatt</a></li>
+            <li><a href="#services">Neufahrzeuge</a></li>
+            <li><a href="#services">Reifenservice</a></li>
+            <li><a href="#services">Finanzierung</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col footer-hours">
+          <h4>Öffnungszeiten</h4>
+          <div class="hours-row">
+            <span class="day">Mo – Fr</span>
+            <span>07:30 – 18:00</span>
+          </div>
+          <div class="hours-row">
+            <span class="day">Samstag</span>
+            <span>09:00 – 14:00</span>
+          </div>
+          <div class="hours-row">
+            <span class="day">Sonntag</span>
+            <span style="color:var(--muted)">Geschlossen</span>
+          </div>
+          <div style="margin-top:1.5rem;">
+            <a href="tel:+4971131696160" style="color:var(--accent); text-decoration:none; font-size:0.9rem; font-weight:600;">
+              +49 (0) 711 316 96 16
+            </a>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="footer-bottom">
+        <span>&copy; 2026 Autohaus Erhardt Esslingen &mdash; Inh. Thomas Erhardt</span>
+        <span>
+          <a href="#">Impressum</a> &nbsp;&middot;&nbsp;
+          <a href="#">Datenschutz</a>
+        </span>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>
